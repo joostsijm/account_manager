@@ -1,0 +1,8 @@
+rival_regions_wrapper/
+.venv/
+.env
+__pycache__
+*.html
+*.log
+*.png
+jobs.json
