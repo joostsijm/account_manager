@@ -12,6 +12,7 @@ sqlalchemy = "*"
 psycopg2-binary = "*"
 python-dotenv = "*"
 apscheduler = "*"
+rival-regions-wrapper = {editable = true,git = "https://github.com/jjoo914/rival_regions_wrapper"}
 
 [requires]
 python_version = "3"

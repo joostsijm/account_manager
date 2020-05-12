@@ -7,7 +7,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from dotenv import load_dotenv
 from apscheduler.schedulers.background import BackgroundScheduler
-from rival_regions_wrapper import RemoteAuthentication
+from rival_regions_wrapper.rival_regions_wrapper import LocalAuthentication, RemoteAuthentication
 
 
 load_dotenv()
@@ -48,8 +48,18 @@ LOGGER.addHandler(FILE_HANDLER)
 SCHEDULER_LOGGER.addHandler(STREAM_HANDLER)
 SCHEDULER_LOGGER.addHandler(FILE_HANDLER)
 
-# api
-MIDDLEWARE = RemoteAuthentication(
-    os.environ["API_URL"],
-    os.environ["AUTHORIZATION"]
-)
+USERNAME = os.environ.get('username', None)
+PASSWORD = os.environ.get('password', None)
+LOGIN_METHOD = os.environ.get('login_method', None)
+
+class MissingEnvironError(Exception):
+    """Error for missing environ"""
+
+if None in (USERNAME, PASSWORD, LOGIN_METHOD):
+    raise MissingEnvironError(
+        'Load the following variables in your user environment:'
+        'username, password, login_method'
+    )
+
+MIDDLEWARE = LocalAuthentication(USERNAME, PASSWORD, LOGIN_METHOD)
+# MIDDLEWARE = RemoteAuthentication(os.environ["API_URL"], os.environ["AUTHORIZATION"])
